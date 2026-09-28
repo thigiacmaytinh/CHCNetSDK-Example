@@ -90,17 +90,8 @@
       <DependentUpon>FormMain.cs</DependentUpon>
     </Compile>
     <Compile Include="HCNetWrapper.cs" />
-    <Compile Include="FormImage.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FormImage.Designer.cs">
-      <DependentUpon>FormImage.cs</DependentUpon>
-    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="FormImage.resx">
-      <DependentUpon>FormImage.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>
     </EmbeddedResource>
