@@ -366,6 +366,156 @@ namespace CameraController
             SetVideoEffect();
         }
 
+        private void btn_getIP_Click(object sender, EventArgs e)
+        {
+            if(m_lUserID < 0)
+            {
+                MessageBox.Show("Please connect to camera first.");
+                return;
+            }
+
+            int size = Marshal.SizeOf(typeof(CHCNetSDK.NET_DVR_NETCFG_V30));
+            IntPtr ptrNetCfg = Marshal.AllocHGlobal(size);
+
+            try
+            {
+                uint bytesReturned = 0;
+                bool getResult = CHCNetSDK.NET_DVR_GetDVRConfig(
+                    m_lUserID,
+                    (uint)CHCNetSDK.NET_DVR_GET_NETCFG_V30,
+                    0,
+                    ptrNetCfg,
+                    (uint)size,
+                    ref bytesReturned);
+
+                if(!getResult)
+                {
+                    uint errorCode = CHCNetSDK.NET_DVR_GetLastError();
+                    MessageBox.Show("Get network config failed. Error: " + errorCode);
+                    return;
+                }
+
+                CHCNetSDK.NET_DVR_NETCFG_V30 netCfg = (CHCNetSDK.NET_DVR_NETCFG_V30)Marshal.PtrToStructure(
+                    ptrNetCfg,
+                    typeof(CHCNetSDK.NET_DVR_NETCFG_V30));
+
+                if(netCfg.struEtherNet == null || netCfg.struEtherNet.Length == 0)
+                {
+                    MessageBox.Show("Invalid network interface configuration.");
+                    return;
+                }
+
+                Func<byte[], string> toIpString = bytes =>
+                {
+                    if(bytes == null || bytes.Length == 0)
+                        return "";
+
+                    int len = 0;
+                    while(len < bytes.Length && bytes[len] != 0)
+                        len++;
+
+                    return System.Text.Encoding.ASCII.GetString(bytes, 0, len).Trim();
+                };
+
+                txt_ipAddress.Text = toIpString(netCfg.struEtherNet[0].struDVRIP.sIpV4);
+                txt_subnetMask.Text = toIpString(netCfg.struEtherNet[0].struDVRIPMask.sIpV4);
+                txt_gateway.Text = toIpString(netCfg.struGatewayIpAddr.sIpV4);
+
+                if(netCfg.byUseDhcp == 1)
+                {
+                    rd_dynamicIP.Checked = true;
+                    rd_staticIP.Checked = false;
+                }
+                else
+                {
+                    rd_staticIP.Checked = true;
+                    rd_dynamicIP.Checked = false;
+                }
+            }
+            finally
+            {
+                Marshal.FreeHGlobal(ptrNetCfg);
+            }
+        }
+
+        private void btn_setIP_Click(object sender, EventArgs e)
+        {
+            if(m_lUserID < 0)
+            {
+                MessageBox.Show("Please connect to camera first.");
+                return;
+            }
+
+            string ip = txt_ipAddress.Text.Trim();
+            string gateway = txt_gateway.Text.Trim();
+            string subnetMask = txt_subnetMask.Text.Trim();
+
+            if(ip == "" || gateway == "" || subnetMask == "")
+            {
+                MessageBox.Show("Please input IP, Gateway and Subnet Mask.");
+                return;
+            }
+
+            int size = Marshal.SizeOf(typeof(CHCNetSDK.NET_DVR_NETCFG));
+            IntPtr ptrNetCfg = Marshal.AllocHGlobal(size);
+
+            try
+            {
+                uint bytesReturned = 0;
+                bool getResult = CHCNetSDK.NET_DVR_GetDVRConfig(
+                    m_lUserID,
+                    (uint)CHCNetSDK.NET_DVR_GET_NETCFG,
+                    0,
+                    ptrNetCfg,
+                    (uint)size,
+                    ref bytesReturned);
+
+                if(!getResult)
+                {
+                    uint errorCode = CHCNetSDK.NET_DVR_GetLastError();
+                    MessageBox.Show("Get network config failed. Error: " + errorCode);
+                    return;
+                }
+
+                CHCNetSDK.NET_DVR_NETCFG netCfg = (CHCNetSDK.NET_DVR_NETCFG)Marshal.PtrToStructure(
+                    ptrNetCfg,
+                    typeof(CHCNetSDK.NET_DVR_NETCFG));
+
+                if(netCfg.struEtherNet == null || netCfg.struEtherNet.Length == 0)
+                {
+                    MessageBox.Show("Invalid network interface configuration.");
+                    return;
+                }
+
+                netCfg.dwSize = (uint)size;
+                netCfg.struEtherNet[0].sDVRIP = ip;
+                netCfg.struEtherNet[0].sDVRIPMask = subnetMask;
+                netCfg.sGatewayIP = gateway;
+
+                Marshal.StructureToPtr(netCfg, ptrNetCfg, true);
+
+                bool setResult = CHCNetSDK.NET_DVR_SetDVRConfig(
+                    m_lUserID,
+                    (uint)CHCNetSDK.NET_DVR_SET_NETCFG,
+                    0,
+                    ptrNetCfg,
+                    (uint)size);
+
+                if(!setResult)
+                {
+                    uint errorCode = CHCNetSDK.NET_DVR_GetLastError();
+                    MessageBox.Show("Set network config failed. Error: " + errorCode);
+                    return;
+                }
+
+                MessageBox.Show("Set IP success. Camera may restart network service.");
+            }
+            finally
+            {
+                Marshal.FreeHGlobal(ptrNetCfg);
+            }
+        }
+
 
     }
 }

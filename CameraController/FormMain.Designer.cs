@@ -70,14 +70,25 @@ namespace CameraController
             this.txt_brightness = new TGMTcontrols.NumericUpDown();
             this.btn_getImageConfig = new TGMTcontrols.DefaultButton();
             this.btn_flip = new TGMTcontrols.DefaultButton();
-            this.panel2 = new System.Windows.Forms.Panel();
+            this.panelCamera = new System.Windows.Forms.Panel();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.txt_ipAddress = new TGMTcontrols.RoundedTextBox();
+            this.label12 = new System.Windows.Forms.Label();
+            this.label13 = new System.Windows.Forms.Label();
+            this.txt_gateway = new TGMTcontrols.RoundedTextBox();
+            this.label14 = new System.Windows.Forms.Label();
+            this.txt_subnetMask = new TGMTcontrols.RoundedTextBox();
+            this.btn_setIP = new TGMTcontrols.DefaultButton();
+            this.rd_dynamicIP = new System.Windows.Forms.RadioButton();
+            this.rd_staticIP = new System.Windows.Forms.RadioButton();
+            this.btn_getIP = new TGMTcontrols.DefaultButton();
             this.panel1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.gradientTab1.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            this.tabPage2.SuspendLayout();
             this.tabPage3.SuspendLayout();
-            this.panel2.SuspendLayout();
+            this.panelCamera.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -522,6 +533,16 @@ namespace CameraController
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.btn_getIP);
+            this.tabPage2.Controls.Add(this.rd_staticIP);
+            this.tabPage2.Controls.Add(this.rd_dynamicIP);
+            this.tabPage2.Controls.Add(this.btn_setIP);
+            this.tabPage2.Controls.Add(this.label14);
+            this.tabPage2.Controls.Add(this.txt_subnetMask);
+            this.tabPage2.Controls.Add(this.label13);
+            this.tabPage2.Controls.Add(this.txt_gateway);
+            this.tabPage2.Controls.Add(this.label12);
+            this.tabPage2.Controls.Add(this.txt_ipAddress);
             this.tabPage2.Location = new System.Drawing.Point(4, 34);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
@@ -727,14 +748,14 @@ namespace CameraController
             this.btn_flip.Transparency = false;
             this.btn_flip.Click += new System.EventHandler(this.btn_flip_Click);
             // 
-            // panel2
+            // panelCamera
             // 
-            this.panel2.Controls.Add(this.pictureBox1);
-            this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel2.Location = new System.Drawing.Point(0, 182);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(449, 472);
-            this.panel2.TabIndex = 19;
+            this.panelCamera.Controls.Add(this.pictureBox1);
+            this.panelCamera.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelCamera.Location = new System.Drawing.Point(0, 182);
+            this.panelCamera.Name = "panelCamera";
+            this.panelCamera.Size = new System.Drawing.Size(449, 472);
+            this.panelCamera.TabIndex = 19;
             // 
             // pictureBox1
             // 
@@ -744,19 +765,180 @@ namespace CameraController
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             // 
+            // txt_ipAddress
+            // 
+            this.txt_ipAddress.BackColor = System.Drawing.Color.Transparent;
+            this.txt_ipAddress.BackgroundColor = System.Drawing.Color.White;
+            this.txt_ipAddress.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(92)))), ((int)(((byte)(133)))), ((int)(((byte)(200)))));
+            this.txt_ipAddress.Font = new System.Drawing.Font("Segoe UI", 11F);
+            this.txt_ipAddress.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.txt_ipAddress.Location = new System.Drawing.Point(200, 146);
+            this.txt_ipAddress.Multiline = false;
+            this.txt_ipAddress.Name = "txt_ipAddress";
+            this.txt_ipAddress.NumberOnly = false;
+            this.txt_ipAddress.Padding = new System.Windows.Forms.Padding(5);
+            this.txt_ipAddress.Radius = 4;
+            this.txt_ipAddress.Size = new System.Drawing.Size(163, 30);
+            this.txt_ipAddress.TabIndex = 55;
+            this.txt_ipAddress.TabStop = false;
+            this.txt_ipAddress.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Font = new System.Drawing.Font("Segoe UI", 11F);
+            this.label12.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(21)))), ((int)(((byte)(66)))), ((int)(((byte)(139)))));
+            this.label12.Location = new System.Drawing.Point(92, 152);
+            this.label12.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(76, 20);
+            this.label12.TabIndex = 56;
+            this.label12.Text = "IP address";
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Font = new System.Drawing.Font("Segoe UI", 11F);
+            this.label13.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(21)))), ((int)(((byte)(66)))), ((int)(((byte)(139)))));
+            this.label13.Location = new System.Drawing.Point(92, 188);
+            this.label13.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(66, 20);
+            this.label13.TabIndex = 58;
+            this.label13.Text = "Gateway";
+            // 
+            // txt_gateway
+            // 
+            this.txt_gateway.BackColor = System.Drawing.Color.Transparent;
+            this.txt_gateway.BackgroundColor = System.Drawing.Color.White;
+            this.txt_gateway.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(92)))), ((int)(((byte)(133)))), ((int)(((byte)(200)))));
+            this.txt_gateway.Font = new System.Drawing.Font("Segoe UI", 11F);
+            this.txt_gateway.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.txt_gateway.Location = new System.Drawing.Point(200, 182);
+            this.txt_gateway.Multiline = false;
+            this.txt_gateway.Name = "txt_gateway";
+            this.txt_gateway.NumberOnly = false;
+            this.txt_gateway.Padding = new System.Windows.Forms.Padding(5);
+            this.txt_gateway.Radius = 4;
+            this.txt_gateway.Size = new System.Drawing.Size(163, 30);
+            this.txt_gateway.TabIndex = 57;
+            this.txt_gateway.TabStop = false;
+            this.txt_gateway.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Font = new System.Drawing.Font("Segoe UI", 11F);
+            this.label14.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(21)))), ((int)(((byte)(66)))), ((int)(((byte)(139)))));
+            this.label14.Location = new System.Drawing.Point(92, 224);
+            this.label14.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(93, 20);
+            this.label14.TabIndex = 60;
+            this.label14.Text = "Subnet mask";
+            // 
+            // txt_subnetMask
+            // 
+            this.txt_subnetMask.BackColor = System.Drawing.Color.Transparent;
+            this.txt_subnetMask.BackgroundColor = System.Drawing.Color.White;
+            this.txt_subnetMask.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(92)))), ((int)(((byte)(133)))), ((int)(((byte)(200)))));
+            this.txt_subnetMask.Font = new System.Drawing.Font("Segoe UI", 11F);
+            this.txt_subnetMask.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.txt_subnetMask.Location = new System.Drawing.Point(200, 218);
+            this.txt_subnetMask.Multiline = false;
+            this.txt_subnetMask.Name = "txt_subnetMask";
+            this.txt_subnetMask.NumberOnly = false;
+            this.txt_subnetMask.Padding = new System.Windows.Forms.Padding(5);
+            this.txt_subnetMask.Radius = 4;
+            this.txt_subnetMask.Size = new System.Drawing.Size(163, 30);
+            this.txt_subnetMask.TabIndex = 59;
+            this.txt_subnetMask.TabStop = false;
+            this.txt_subnetMask.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            // 
+            // btn_setIP
+            // 
+            this.btn_setIP.Active1 = System.Drawing.Color.DodgerBlue;
+            this.btn_setIP.Active2 = System.Drawing.Color.DeepSkyBlue;
+            this.btn_setIP.BackColor = System.Drawing.Color.Transparent;
+            this.btn_setIP.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.btn_setIP.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
+            this.btn_setIP.ForeColor = System.Drawing.Color.White;
+            this.btn_setIP.Icon = null;
+            this.btn_setIP.ImageLocation = new System.Drawing.Point(0, 0);
+            this.btn_setIP.ImageSize = new System.Drawing.Size(0, 0);
+            this.btn_setIP.Inactive1 = System.Drawing.Color.DeepSkyBlue;
+            this.btn_setIP.Inactive2 = System.Drawing.Color.DodgerBlue;
+            this.btn_setIP.Location = new System.Drawing.Point(244, 272);
+            this.btn_setIP.Name = "btn_setIP";
+            this.btn_setIP.Radius = 6;
+            this.btn_setIP.Size = new System.Drawing.Size(110, 36);
+            this.btn_setIP.Stroke = 0;
+            this.btn_setIP.StrokeColor = System.Drawing.Color.Gray;
+            this.btn_setIP.TabIndex = 61;
+            this.btn_setIP.Text = "Set IP";
+            this.btn_setIP.Transparency = false;
+            this.btn_setIP.Click += new System.EventHandler(this.btn_setIP_Click);
+            // 
+            // rd_dynamicIP
+            // 
+            this.rd_dynamicIP.AutoSize = true;
+            this.rd_dynamicIP.Checked = true;
+            this.rd_dynamicIP.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(21)))), ((int)(((byte)(66)))), ((int)(((byte)(139)))));
+            this.rd_dynamicIP.Location = new System.Drawing.Point(53, 38);
+            this.rd_dynamicIP.Name = "rd_dynamicIP";
+            this.rd_dynamicIP.Size = new System.Drawing.Size(154, 24);
+            this.rd_dynamicIP.TabIndex = 62;
+            this.rd_dynamicIP.Text = "Dynamic IP (DHCP)";
+            this.rd_dynamicIP.UseVisualStyleBackColor = true;
+            // 
+            // rd_staticIP
+            // 
+            this.rd_staticIP.AutoSize = true;
+            this.rd_staticIP.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(21)))), ((int)(((byte)(66)))), ((int)(((byte)(139)))));
+            this.rd_staticIP.Location = new System.Drawing.Point(238, 38);
+            this.rd_staticIP.Name = "rd_staticIP";
+            this.rd_staticIP.Size = new System.Drawing.Size(80, 24);
+            this.rd_staticIP.TabIndex = 63;
+            this.rd_staticIP.Text = "Static IP";
+            this.rd_staticIP.UseVisualStyleBackColor = true;
+            // 
+            // btn_getIP
+            // 
+            this.btn_getIP.Active1 = System.Drawing.Color.DodgerBlue;
+            this.btn_getIP.Active2 = System.Drawing.Color.DeepSkyBlue;
+            this.btn_getIP.BackColor = System.Drawing.Color.Transparent;
+            this.btn_getIP.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.btn_getIP.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
+            this.btn_getIP.ForeColor = System.Drawing.Color.White;
+            this.btn_getIP.Icon = null;
+            this.btn_getIP.ImageLocation = new System.Drawing.Point(0, 0);
+            this.btn_getIP.ImageSize = new System.Drawing.Size(0, 0);
+            this.btn_getIP.Inactive1 = System.Drawing.Color.DeepSkyBlue;
+            this.btn_getIP.Inactive2 = System.Drawing.Color.DodgerBlue;
+            this.btn_getIP.Location = new System.Drawing.Point(128, 272);
+            this.btn_getIP.Name = "btn_getIP";
+            this.btn_getIP.Radius = 6;
+            this.btn_getIP.Size = new System.Drawing.Size(110, 36);
+            this.btn_getIP.Stroke = 0;
+            this.btn_getIP.StrokeColor = System.Drawing.Color.Gray;
+            this.btn_getIP.TabIndex = 64;
+            this.btn_getIP.Text = "Get IP";
+            this.btn_getIP.Transparency = false;
+            this.btn_getIP.Click += new System.EventHandler(this.btn_getIP_Click);
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 21F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1041, 676);
-            this.Controls.Add(this.panel2);
+            this.Controls.Add(this.panelCamera);
             this.Controls.Add(this.gradientTab1);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.panel1);
             this.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "FormMain";
-            this.Text = "CameraController";
+            this.Text = "CHCNetSDK-Example";
             this.Load += new System.EventHandler(this.FormMain_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
@@ -765,9 +947,11 @@ namespace CameraController
             this.gradientTab1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
+            this.tabPage2.ResumeLayout(false);
+            this.tabPage2.PerformLayout();
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
-            this.panel2.ResumeLayout(false);
+            this.panelCamera.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -794,7 +978,7 @@ namespace CameraController
         private RoundedTextBox txt_port;
         private RoundedTextBox txt_username;
         private PasswordBox txt_password;
-        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Panel panelCamera;
         private System.Windows.Forms.PictureBox pictureBox1;
         private RoundedTextBox textBoxID;
         private System.Windows.Forms.Label label3;
@@ -817,6 +1001,16 @@ namespace CameraController
         private System.Windows.Forms.Label label9;
         private NumericUpDown txt_contrast;
         private DefaultButton btn_setImageConfig;
+        private System.Windows.Forms.Label label12;
+        private RoundedTextBox txt_ipAddress;
+        private System.Windows.Forms.Label label14;
+        private RoundedTextBox txt_subnetMask;
+        private System.Windows.Forms.Label label13;
+        private RoundedTextBox txt_gateway;
+        private DefaultButton btn_setIP;
+        private System.Windows.Forms.RadioButton rd_dynamicIP;
+        private System.Windows.Forms.RadioButton rd_staticIP;
+        private DefaultButton btn_getIP;
     }
 }
 
