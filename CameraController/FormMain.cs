@@ -446,17 +446,26 @@ namespace CameraController
                 return;
             }
 
+            bool isDynamic = rd_dynamicIP.Checked;
+            bool isStatic = rd_staticIP.Checked;
+
+            if(!isDynamic && !isStatic)
+            {
+                MessageBox.Show("Please select Dynamic IP or Static IP.");
+                return;
+            }
+
             string ip = txt_ipAddress.Text.Trim();
             string gateway = txt_gateway.Text.Trim();
             string subnetMask = txt_subnetMask.Text.Trim();
 
-            if(ip == "" || gateway == "" || subnetMask == "")
+            if(isStatic && (ip == "" || gateway == "" || subnetMask == ""))
             {
-                MessageBox.Show("Please input IP, Gateway and Subnet Mask.");
+                MessageBox.Show("Please input IP, Gateway and Subnet Mask for static mode.");
                 return;
             }
 
-            int size = Marshal.SizeOf(typeof(CHCNetSDK.NET_DVR_NETCFG));
+            int size = Marshal.SizeOf(typeof(CHCNetSDK.NET_DVR_NETCFG_V30));
             IntPtr ptrNetCfg = Marshal.AllocHGlobal(size);
 
             try
@@ -464,7 +473,7 @@ namespace CameraController
                 uint bytesReturned = 0;
                 bool getResult = CHCNetSDK.NET_DVR_GetDVRConfig(
                     m_lUserID,
-                    (uint)CHCNetSDK.NET_DVR_GET_NETCFG,
+                    (uint)CHCNetSDK.NET_DVR_GET_NETCFG_V30,
                     0,
                     ptrNetCfg,
                     (uint)size,
@@ -477,9 +486,9 @@ namespace CameraController
                     return;
                 }
 
-                CHCNetSDK.NET_DVR_NETCFG netCfg = (CHCNetSDK.NET_DVR_NETCFG)Marshal.PtrToStructure(
+                CHCNetSDK.NET_DVR_NETCFG_V30 netCfg = (CHCNetSDK.NET_DVR_NETCFG_V30)Marshal.PtrToStructure(
                     ptrNetCfg,
-                    typeof(CHCNetSDK.NET_DVR_NETCFG));
+                    typeof(CHCNetSDK.NET_DVR_NETCFG_V30));
 
                 if(netCfg.struEtherNet == null || netCfg.struEtherNet.Length == 0)
                 {
@@ -487,16 +496,33 @@ namespace CameraController
                     return;
                 }
 
+                Func<string, byte[]> toFixedIpBytes = value =>
+                {
+                    byte[] result = new byte[16];
+                    if(!string.IsNullOrWhiteSpace(value))
+                    {
+                        byte[] src = System.Text.Encoding.ASCII.GetBytes(value.Trim());
+                        int len = src.Length > 15 ? 15 : src.Length;
+                        Array.Copy(src, result, len);
+                    }
+                    return result;
+                };
+
                 netCfg.dwSize = (uint)size;
-                netCfg.struEtherNet[0].sDVRIP = ip;
-                netCfg.struEtherNet[0].sDVRIPMask = subnetMask;
-                netCfg.sGatewayIP = gateway;
+                netCfg.byUseDhcp = (byte)(isDynamic ? 1 : 0);
+
+                if(isStatic)
+                {
+                    netCfg.struEtherNet[0].struDVRIP.sIpV4 = toFixedIpBytes(ip);
+                    netCfg.struEtherNet[0].struDVRIPMask.sIpV4 = toFixedIpBytes(subnetMask);
+                    netCfg.struGatewayIpAddr.sIpV4 = toFixedIpBytes(gateway);
+                }
 
                 Marshal.StructureToPtr(netCfg, ptrNetCfg, true);
 
                 bool setResult = CHCNetSDK.NET_DVR_SetDVRConfig(
                     m_lUserID,
-                    (uint)CHCNetSDK.NET_DVR_SET_NETCFG,
+                    (uint)CHCNetSDK.NET_DVR_SET_NETCFG_V30,
                     0,
                     ptrNetCfg,
                     (uint)size);
@@ -508,7 +534,8 @@ namespace CameraController
                     return;
                 }
 
-                MessageBox.Show("Set IP success. Camera may restart network service.");
+                MessageBox.Show("Set network mode success. Camera may restart network service.");
+                btn_getIP_Click(null, EventArgs.Empty);
             }
             finally
             {
